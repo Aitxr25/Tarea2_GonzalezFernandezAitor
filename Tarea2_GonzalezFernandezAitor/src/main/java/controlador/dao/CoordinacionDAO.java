@@ -13,203 +13,204 @@ import modelo.Persona;
 
 public class CoordinacionDAO {
 
-    private final ConexionBD conex;
+	private final ConexionBD conex;
 
-    public CoordinacionDAO(ConexionBD conex) {
-        this.conex = conex;
-    }
+	public CoordinacionDAO(ConexionBD conex) {
+		this.conex = conex;
+	}
 
-    // metodo para buscar el coordinador por la id
-    public Coordinacion buscarCoordinadorPorId(Long idCoord) {
+	// metodo para buscar el coordinador por la id
+	public Coordinacion buscarCoordinadorPorId(Long idCoord) {
 
-        String sql = "SELECT idCoord, idPersona, senior, fechasenior "
-                   + "FROM coordinacion WHERE idCoord = ?";
+		String sql = "SELECT idCoord, idPersona, senior, fechasenior "
+				+ "FROM coordinacion WHERE idCoord = ?";
 
-        try (PreparedStatement ps = conex.getConnection().prepareStatement(sql)) {
+		try (PreparedStatement ps = conex.getConnection().prepareStatement(sql)) {
 
-            ps.setLong(1, idCoord);
+			ps.setLong(1, idCoord);
 
-            try (ResultSet rs = ps.executeQuery()) {
+			try (ResultSet rs = ps.executeQuery()) {
 
-                if (rs.next()) {
+				if (rs.next()) {
 
-                    Long idPersona = rs.getLong("idPersona");
+					Long idPersona = rs.getLong("idPersona");
 
-                    
-                    PersonaDAO personaDAO = new PersonaDAO(conex);
-                    Persona p = personaDAO.obtenerPorId(idPersona);
 
-                    if (p == null) {
-                        System.err.println("No se encontro la persona asociada al coordinador.");
-                        return null;
-                    }
+					PersonaDAO personaDAO = new PersonaDAO(conex);
+					Persona p = personaDAO.obtenerPorId(idPersona);
 
-                    return new Coordinacion(
-                            idPersona,                   
-                            p.getNombre(),
-                            p.getEmail(),
-                            p.getNacionalidad(),
-                            idCoord,                     
-                            rs.getBoolean("senior"),
-                            rs.getDate("fechasenior") != null
-                                    ? rs.getDate("fechasenior").toLocalDate()
-                                    : null
-                    );
+					if (p == null) {
+						System.err.println("No se encontro la persona asociada al coordinador.");
+						return null;
+					}
 
-                }
-            }
+					return new Coordinacion(
+							idPersona,                   
+							p.getNombre(),
+							p.getEmail(),
+							p.getNacionalidad(),
+							idCoord,                     
+							rs.getBoolean("senior"),
+							rs.getDate("fechasenior") != null
+							? rs.getDate("fechasenior").toLocalDate()
+									: null
+							);
 
-        } catch (SQLException e) {
-            System.err.println("Error buscando coordinador: " + e.getMessage());
-        }
+				}
+			}
 
-        return null;
-    }
+		} catch (SQLException e) {
+			System.err.println("Error buscando coordinador: " + e.getMessage());
+		}
 
-    // metodo para ver si existe el coordinador
-    public boolean existeCoordinador(long idCoord) {
+		return null;
+	}
 
-        String sql = "SELECT COUNT(*) FROM coordinacion WHERE idCoord = ?";
+	// metodo para ver si existe el coordinador
+	public boolean existeCoordinador(long idCoord) {
 
-        try (PreparedStatement ps = conex.getConnection().prepareStatement(sql)) {
+		String sql = "SELECT COUNT(*) FROM coordinacion WHERE idCoord = ?";
 
-            ps.setLong(1, idCoord);
+		try (PreparedStatement ps = conex.getConnection().prepareStatement(sql)) {
 
-            try (ResultSet rs = ps.executeQuery()) {
-                if (rs.next()) return rs.getInt(1) > 0;
-            }
+			ps.setLong(1, idCoord);
 
-        } catch (SQLException e) {
-            System.err.println("Error comprobando coordinador: " + e.getMessage());
-        }
+			try (ResultSet rs = ps.executeQuery()) {
+				if (rs.next()) return rs.getInt(1) > 0;
+			}
 
-        return false;
-    }
+		} catch (SQLException e) {
+			System.err.println("Error comprobando coordinador: " + e.getMessage());
+		}
 
-    // metodo para insertar coordinador
-    public void insertarCoordinador(long idPersona, boolean senior, LocalDate fecha) {
+		return false;
+	}
 
-        String sql = "INSERT INTO coordinacion (idPersona, senior, fechasenior) "
-                   + "VALUES (?, ?, ?)";
+	// metodo para insertar coordinador
+	public void insertarCoordinador(long idPersona, boolean senior, LocalDate fecha) {
 
-        try (PreparedStatement ps = conex.getConnection().prepareStatement(sql)) {
+		String sql = "INSERT INTO coordinacion (idPersona, senior, fechasenior) "
+				+ "VALUES (?, ?, ?)";
 
-            ps.setLong(1, idPersona);
-            ps.setBoolean(2, senior);
+		try (PreparedStatement ps = conex.getConnection().prepareStatement(sql)) {
 
-            if (fecha != null)
-                ps.setDate(3, java.sql.Date.valueOf(fecha));
-            else
-                ps.setNull(3, Types.DATE);
+			ps.setLong(1, idPersona);
+			ps.setBoolean(2, senior);
 
-            ps.executeUpdate();
+			if (fecha != null)
+				ps.setDate(3, java.sql.Date.valueOf(fecha));
+			else
+				ps.setNull(3, Types.DATE);
 
-        } catch (SQLException e) {
-            System.err.println("Error insertando coordinador: " + e.getMessage());
-        }
-    }
-    
-    //metodo para obtener la id de los coordinadores por su id de credenciales
-    public Long obtenerIdCoordPorIdCredenciales(long idCred) {
+			ps.executeUpdate();
 
-        String sql = """
-            SELECT c.idCoord
-            FROM coordinacion c
-            JOIN persona p ON c.idPersona = p.id
-            WHERE p.id_credenciales = ?
-        """;
+		} catch (SQLException e) {
+			System.err.println("Error insertando coordinador: " + e.getMessage());
+		}
+	}
 
-        try (PreparedStatement ps = conex.getConnection().prepareStatement(sql)) {
+	//metodo para obtener la id de los coordinadores por su id de credenciales
+	public Long obtenerIdCoordPorIdCredenciales(long idCred) {
 
-            ps.setLong(1, idCred);
-            ResultSet rs = ps.executeQuery();
+		String sql = """
+				    SELECT c.idCoord
+				    FROM coordinacion c
+				    JOIN persona p ON c.idPersona = p.id
+				    WHERE p.id_credenciales = ?
+				""";
 
-            if (rs.next()) return rs.getLong("idCoord");
+		try (PreparedStatement ps = conex.getConnection().prepareStatement(sql)) {
 
-        } catch (Exception e) {
-            System.out.println("Error obteniendo idCoord: " + e.getMessage());
-        }
+			ps.setLong(1, idCred);
+			ResultSet rs = ps.executeQuery();
 
-        return null;
-    }
-    //metodo para obtener todos los coordinadores
-    public List<Coordinacion> obtenerTodos() {
+			if (rs.next()) return rs.getLong("idCoord");
 
-        List<Coordinacion> lista = new ArrayList<>();
+		} catch (Exception e) {
+			System.out.println("Error obteniendo idCoord: " + e.getMessage());
+		}
 
-        String sql = """
-            SELECT idCoord
-            FROM coordinacion
-        """;
+		return null;
+	}
+	//metodo para obtener todos los coordinadores
+	public List<Coordinacion> obtenerTodos() {
 
-        try (PreparedStatement ps = conex.getConnection().prepareStatement(sql);
-             ResultSet rs = ps.executeQuery()) {
+		List<Coordinacion> lista = new ArrayList<>();
 
-            while (rs.next()) {
-                long idCoord = rs.getLong("idCoord");
+		String sql = """
+				    SELECT idCoord
+				    FROM coordinacion
+				""";
 
-                Coordinacion c = buscarCoordinadorPorId(idCoord);
-                if (c != null) lista.add(c);
-            }
+		try (PreparedStatement ps = conex.getConnection().prepareStatement(sql);
+				ResultSet rs = ps.executeQuery()) {
 
-        } catch (Exception e) {
-            System.out.println("Error obteniendo lista de coordinadores: " + e.getMessage());
-        }
+			while (rs.next()) {
+				long idCoord = rs.getLong("idCoord");
 
-        return lista;
-    }
-    
-    //busca coordinador por su id persona
-    public Coordinacion buscarPorIdPersona(Long idPersona) {
+				Coordinacion c = buscarCoordinadorPorId(idCoord);
+				if (c != null) lista.add(c);
+			}
 
-        String sql = "SELECT idCoord FROM coordinacion WHERE idPersona = ?";
+		} catch (Exception e) {
+			System.out.println("Error obteniendo lista de coordinadores: " + e.getMessage());
+		}
 
-        try (PreparedStatement ps = conex.getConnection().prepareStatement(sql)) {
+		return lista;
+	}
 
-            ps.setLong(1, idPersona);
-            ResultSet rs = ps.executeQuery();
+	//busca coordinador por su id persona
+	public Coordinacion buscarPorIdPersona(Long idPersona) {
 
-            if (rs.next()) {
-                long idCoord = rs.getLong("idCoord");
-                return buscarCoordinadorPorId(idCoord);
-            }
+		String sql = "SELECT idCoord FROM coordinacion WHERE idPersona = ?";
 
-        } catch (Exception e) {
-            System.out.println("Error buscando coordinador por persona: " + e.getMessage());
-        }
+		try (PreparedStatement ps = conex.getConnection().prepareStatement(sql)) {
 
-        return null;
-    }
-    
-    public boolean actualizarCoordinador(Long idPersona, boolean senior, LocalDate fecha) {
+			ps.setLong(1, idPersona);
+			ResultSet rs = ps.executeQuery();
 
-        // comprobar si existe
-        Coordinacion coord = buscarPorIdPersona(idPersona);
+			if (rs.next()) {
+				long idCoord = rs.getLong("idCoord");
+				return buscarCoordinadorPorId(idCoord);
+			}
 
-        if (coord == null) {
-           
-            insertarCoordinador(idPersona, senior, fecha);
-            return true;
-        }
+		} catch (Exception e) {
+			System.out.println("Error buscando coordinador por persona: " + e.getMessage());
+		}
 
-        String sql = "UPDATE coordinacion SET senior = ?, fechasenior = ? WHERE idCoord = ?";
+		return null;
+	}
 
-        try (PreparedStatement ps = conex.getConnection().prepareStatement(sql)) {
+	//metodo que actualiza el coordinador
+	public boolean actualizarCoordinador(Long idPersona, boolean senior, LocalDate fecha) {
 
-            ps.setBoolean(1, senior);
+		// comprobar si existe
+		Coordinacion coord = buscarPorIdPersona(idPersona);
 
-            if (fecha != null)
-                ps.setDate(2, java.sql.Date.valueOf(fecha));
-            else
-                ps.setNull(2, Types.DATE);
+		if (coord == null) {
 
-            ps.setLong(3, coord.getIdCoord());
+			insertarCoordinador(idPersona, senior, fecha);
+			return true;
+		}
 
-            return ps.executeUpdate() > 0;
+		String sql = "UPDATE coordinacion SET senior = ?, fechasenior = ? WHERE idCoord = ?";
 
-        } catch (SQLException e) {
-            System.err.println("Error actualizando coordinador: " + e.getMessage());
-            return false;
-        }
-    }
+		try (PreparedStatement ps = conex.getConnection().prepareStatement(sql)) {
+
+			ps.setBoolean(1, senior);
+
+			if (fecha != null)
+				ps.setDate(2, java.sql.Date.valueOf(fecha));
+			else
+				ps.setNull(2, Types.DATE);
+
+			ps.setLong(3, coord.getIdCoord());
+
+			return ps.executeUpdate() > 0;
+
+		} catch (SQLException e) {
+			System.err.println("Error actualizando coordinador: " + e.getMessage());
+			return false;
+		}
+	}
 }

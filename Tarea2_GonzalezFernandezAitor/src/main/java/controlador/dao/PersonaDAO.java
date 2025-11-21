@@ -11,162 +11,152 @@ import modelo.Persona;
 
 public class PersonaDAO {
 
-    private final ConexionBD conexionBD;
+	private final ConexionBD conexionBD;
 
-    public PersonaDAO(ConexionBD conexionBD) {
-        this.conexionBD = conexionBD;
-        
-    }
+	public PersonaDAO(ConexionBD conexionBD) {
+		this.conexionBD = conexionBD;
 
- // metodo que verifica si se repite el email
- 
-    public boolean existeEmail(String email) {
-        String sql = "SELECT id FROM persona WHERE email = ?";
+	}
 
-        try (PreparedStatement ps = conexionBD.getConnection().prepareStatement(sql)) {
-            ps.setString(1, email);
-            try (ResultSet rs = ps.executeQuery()) {
-                return rs.next();
-            }
+	// metodo que verifica si se repite el email
 
-        } catch (SQLException e) {
-            System.err.println("Error verificando email: " + e.getMessage());
-            return false;
-        }
-    }
+	public boolean existeEmail(String email) {
+		String sql = "SELECT id FROM persona WHERE email = ?";
 
-    //  metodo para insertar persona
-    
-    public long insertarPersona(Persona p) {
-        String sql = """
-            INSERT INTO persona (id_credenciales, email, nombre, nacionalidad)
-            VALUES (?, ?, ?, ?)
-        """;
+		try (PreparedStatement ps = conexionBD.getConnection().prepareStatement(sql)) {
+			ps.setString(1, email);
+			try (ResultSet rs = ps.executeQuery()) {
+				return rs.next();
+			}
 
-        try (PreparedStatement ps = conexionBD.getConnection()
-                    .prepareStatement(sql, Statement.RETURN_GENERATED_KEYS)) {
+		} catch (SQLException e) {
+			System.err.println("Error verificando email: " + e.getMessage());
+			return false;
+		}
+	}
 
-            ps.setLong(1, p.getIdCredenciales());
-            ps.setString(2, p.getEmail());
-            ps.setString(3, p.getNombre());
-            ps.setString(4, p.getNacionalidad());
+	// metodo para insertar persona
 
-            ps.executeUpdate();
+	public long insertarPersona(Persona p) {
+		String sql = """
+				    INSERT INTO persona (id_credenciales, email, nombre, nacionalidad)
+				    VALUES (?, ?, ?, ?)
+				""";
 
-            ResultSet rs = ps.getGeneratedKeys();
-            if (rs.next()) return rs.getLong(1);
+		try (PreparedStatement ps = conexionBD.getConnection().prepareStatement(sql, Statement.RETURN_GENERATED_KEYS)) {
 
-        } catch (SQLException e) {
-            System.err.println("Error insertando a la persona: " + e.getMessage());
-        }
+			ps.setLong(1, p.getIdCredenciales());
+			ps.setString(2, p.getEmail());
+			ps.setString(3, p.getNombre());
+			ps.setString(4, p.getNacionalidad());
 
-        return -1;
-    }
+			ps.executeUpdate();
 
-    //metodo que obtiene a la persona por su id
-  
-    public Persona obtenerPorId(Long idPersona) {
+			ResultSet rs = ps.getGeneratedKeys();
+			if (rs.next())
+				return rs.getLong(1);
 
-        String sql = """
-            SELECT id, id_credenciales, email, nombre, nacionalidad 
-            FROM persona 
-            WHERE id = ?
-        """;
+		} catch (SQLException e) {
+			System.err.println("Error insertando a la persona: " + e.getMessage());
+		}
 
-        try (PreparedStatement ps = conexionBD.getConnection().prepareStatement(sql)) {
+		return -1;
+	}
 
-            ps.setLong(1, idPersona);
+	// metodo que obtiene a la persona por su id
 
-            try (ResultSet rs = ps.executeQuery()) {
+	public Persona obtenerPorId(Long idPersona) {
 
-                if (rs.next()) {
+		String sql = """
+				    SELECT id, id_credenciales, email, nombre, nacionalidad
+				    FROM persona
+				    WHERE id = ?
+				""";
 
-                    return new Persona(
-                        rs.getLong("id"),
-                        rs.getLong("id_credenciales"),
-                        rs.getString("email"),
-                        rs.getString("nombre"),
-                        rs.getString("nacionalidad")
-                    );
-                }
-            }
+		try (PreparedStatement ps = conexionBD.getConnection().prepareStatement(sql)) {
 
-        } catch (SQLException e) {
-            System.err.println("Error obteniendo a la persona: " + e.getMessage());
-        }
+			ps.setLong(1, idPersona);
 
-        return null;
-    }
-    
-    public boolean actualizarDatosPersonales(Long idPersona, String nombre, String email, String nacionalidad) {
-        String sql = """
-            UPDATE persona
-            SET nombre = ?, email = ?, nacionalidad = ?
-            WHERE id = ?
-        """;
+			try (ResultSet rs = ps.executeQuery()) {
 
-        try (PreparedStatement ps = conexionBD.getConnection().prepareStatement(sql)) {
-            ps.setString(1, nombre);
-            ps.setString(2, email);
-            ps.setString(3, nacionalidad);
-            ps.setLong(4, idPersona);
+				if (rs.next()) {
 
-            int updated = ps.executeUpdate();
-            return updated > 0;
-        } catch (SQLException e) {
-            System.err.println("Error actualizando datos personales: " + e.getMessage());
-            return false;
-        }
-    }
+					return new Persona(rs.getLong("id"), rs.getLong("id_credenciales"), rs.getString("email"),
+							rs.getString("nombre"), rs.getString("nacionalidad"));
+				}
+			}
 
-    // metodo para comprobar si email existe para otra persona 
-    public boolean existeEmailParaOtraPersona(String email, Long idPersona) {
-        String sql = "SELECT id FROM persona WHERE email = ? AND id <> ?";
+		} catch (SQLException e) {
+			System.err.println("Error obteniendo a la persona: " + e.getMessage());
+		}
 
-        try (PreparedStatement ps = conexionBD.getConnection().prepareStatement(sql)) {
-            ps.setString(1, email);
-            ps.setLong(2, idPersona);
-            try (ResultSet rs = ps.executeQuery()) {
-                return rs.next();
-            }
-        } catch (SQLException e) {
-            System.err.println("Error verificando el email para otra persona: " + e.getMessage());
-            return false;
-        }
-    }
-    
-    //metodo para obtener a todas las personas
-    public List<Persona> obtenerTodasLasPersonas() {
+		return null;
+	}
 
-        List<Persona> lista = new ArrayList<>();
+	public boolean actualizarDatosPersonales(Long idPersona, String nombre, String email, String nacionalidad) {
+		String sql = """
+				    UPDATE persona
+				    SET nombre = ?, email = ?, nacionalidad = ?
+				    WHERE id = ?
+				""";
 
-        String sql = """
-            SELECT id, id_credenciales, email, nombre, nacionalidad
-            FROM persona
-            ORDER BY id
-        """;
+		try (PreparedStatement ps = conexionBD.getConnection().prepareStatement(sql)) {
+			ps.setString(1, nombre);
+			ps.setString(2, email);
+			ps.setString(3, nacionalidad);
+			ps.setLong(4, idPersona);
 
-        try (PreparedStatement ps = conexionBD.getConnection().prepareStatement(sql);
-             ResultSet rs = ps.executeQuery()) {
+			int updated = ps.executeUpdate();
+			return updated > 0;
+		} catch (SQLException e) {
+			System.err.println("Error actualizando datos personales: " + e.getMessage());
+			return false;
+		}
+	}
 
-            while (rs.next()) {
+	// metodo para comprobar si email existe para otra persona
+	public boolean existeEmailParaOtraPersona(String email, Long idPersona) {
+		String sql = "SELECT id FROM persona WHERE email = ? AND id <> ?";
 
-                Persona p = new Persona(
-                        rs.getLong("id"),
-                        rs.getLong("id_credenciales"),
-                        rs.getString("email"),
-                        rs.getString("nombre"),
-                        rs.getString("nacionalidad")
-                );
+		try (PreparedStatement ps = conexionBD.getConnection().prepareStatement(sql)) {
+			ps.setString(1, email);
+			ps.setLong(2, idPersona);
+			try (ResultSet rs = ps.executeQuery()) {
+				return rs.next();
+			}
+		} catch (SQLException e) {
+			System.err.println("Error verificando el email para otra persona: " + e.getMessage());
+			return false;
+		}
+	}
 
-                lista.add(p);
-            }
+	// metodo para obtener a todas las personas
+	public List<Persona> obtenerTodasLasPersonas() {
 
-        } catch (SQLException e) {
-            System.err.println("Error obteniendo la lista de personas: " + e.getMessage());
-        }
+		List<Persona> lista = new ArrayList<>();
 
-        return lista;
-    }
+		String sql = """
+				    SELECT id, id_credenciales, email, nombre, nacionalidad
+				    FROM persona
+				    ORDER BY id
+				""";
+
+		try (PreparedStatement ps = conexionBD.getConnection().prepareStatement(sql);
+				ResultSet rs = ps.executeQuery()) {
+
+			while (rs.next()) {
+
+				Persona p = new Persona(rs.getLong("id"), rs.getLong("id_credenciales"), rs.getString("email"),
+						rs.getString("nombre"), rs.getString("nacionalidad"));
+
+				lista.add(p);
+			}
+
+		} catch (SQLException e) {
+			System.err.println("Error obteniendo la lista de personas: " + e.getMessage());
+		}
+
+		return lista;
+	}
 
 }
