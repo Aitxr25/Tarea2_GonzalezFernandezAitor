@@ -1,0 +1,29 @@
+package servicios;
+
+import modelo.Credenciales;
+
+/**
+ * Simple servicio de sesión en memoria.
+ * 
+ */
+public class SesionService {
+    private static Credenciales usuarioActual = null;
+    
+    
+    public static void iniciarSesion(Credenciales usuario) {
+        usuarioActual = usuario;
+    }
+
+    public static void cerrarSesion() {
+        usuarioActual = null;
+        
+    }
+
+    public static boolean isLogged() {
+        return usuarioActual != null;
+    }
+
+    public static Credenciales getUsuario() {
+        return usuarioActual;
+    }
+}
