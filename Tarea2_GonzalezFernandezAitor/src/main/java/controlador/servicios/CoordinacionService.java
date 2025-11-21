@@ -4,12 +4,12 @@
 * @version 1.0
 */
 
-package servicios;
+package controlador.servicios;
 
 import java.time.LocalDate;
 import java.util.List;
 
-import dao.CoordinacionDAO;
+import controlador.dao.CoordinacionDAO;
 import modelo.Coordinacion;
 
 public class CoordinacionService {
@@ -22,11 +22,18 @@ public class CoordinacionService {
 
     //metodo que devuelve al coordinador por su id
     public Coordinacion obtenerCoordinadorPorId(Long idCoord) {
+
         if (idCoord == null) {
-            throw new IllegalArgumentException("El ID del coordinador no puede ser null");
+            System.err.println("Error: el ID del coordinador no puede ser null.");
+            return null;
         }
 
-        return coordinacionDAO.buscarCoordinadorPorId(idCoord);
+        try {
+            return coordinacionDAO.buscarCoordinadorPorId(idCoord);
+        } catch (Exception e) {
+            System.err.println("Error obteniendo coordinador por ID: " + e.getMessage());
+            return null;
+        }
     }
     
     // metodo que busca coordinador por idPersona

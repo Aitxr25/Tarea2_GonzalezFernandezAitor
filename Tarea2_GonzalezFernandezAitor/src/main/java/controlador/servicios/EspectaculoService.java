@@ -4,17 +4,11 @@
 * @version 1.0
 */
 
-package servicios;
+package controlador.servicios;
 
 
 import modelo.Espectaculo;
 import modelo.Numero;
-import dao.ArtistaDAO;
-import dao.ConexionBD;
-import dao.CoordinacionDAO;
-import dao.EspectaculoDAO;
-import dao.NumeroDAO;
-import dao.PersonaDAO;
 
 import java.sql.Connection;
 import java.time.LocalDate;
@@ -23,6 +17,13 @@ import java.time.temporal.ChronoUnit;
 import java.util.Comparator;
 import java.util.List;
 import java.util.Set;
+
+import controlador.dao.ArtistaDAO;
+import controlador.dao.ConexionBD;
+import controlador.dao.CoordinacionDAO;
+import controlador.dao.EspectaculoDAO;
+import controlador.dao.NumeroDAO;
+import controlador.dao.PersonaDAO;
 
 public class EspectaculoService {
 

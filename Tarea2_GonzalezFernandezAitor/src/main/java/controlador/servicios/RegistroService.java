@@ -1,10 +1,10 @@
-package servicios;
+package controlador.servicios;
 
 import java.sql.Connection;
 import java.time.LocalDate;
 import java.util.Set;
 
-import dao.*;
+import controlador.dao.*;
 import modelo.*;
 
 //esto lo cree para el metodo registrar persona, no se si esta bien hacerlo porque no existe una clase "Registro"

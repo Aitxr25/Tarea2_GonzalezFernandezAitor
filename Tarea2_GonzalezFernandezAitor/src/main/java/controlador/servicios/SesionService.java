@@ -1,11 +1,8 @@
-package servicios;
+package controlador.servicios;
 
 import modelo.Credenciales;
 
-/**
- * Simple servicio de sesión en memoria.
- * 
- */
+// servicio de sesion para "controlarla"
 public class SesionService {
     private static Credenciales usuarioActual = null;
     

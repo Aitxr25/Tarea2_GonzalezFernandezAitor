@@ -1,4 +1,4 @@
-package servicios;
+package controlador.servicios;
 
 import modelo.Credenciales;
 import modelo.Perfil;
@@ -6,8 +6,8 @@ import vista.Config;
 
 import java.util.Optional;
 
-import dao.ConexionBD;
-import dao.CredencialesDAO;
+import controlador.dao.ConexionBD;
+import controlador.dao.CredencialesDAO;
 
 import java.util.Objects;
 

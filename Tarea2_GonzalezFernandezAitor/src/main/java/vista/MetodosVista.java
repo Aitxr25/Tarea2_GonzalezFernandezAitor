@@ -8,13 +8,15 @@ import modelo.Espectaculo;
 import modelo.Numero;
 import modelo.Perfil;
 import modelo.Persona;
-import servicios.ArtistaService;
-import servicios.CoordinacionService;
-import servicios.CredencialesService;
-import servicios.EspectaculoService;
-import servicios.PersonaService;
-import servicios.RegistroService;
-import servicios.SesionService;
+import controlador.dao.ConexionBD;
+import controlador.dao.CoordinacionDAO;
+import controlador.servicios.ArtistaService;
+import controlador.servicios.CoordinacionService;
+import controlador.servicios.CredencialesService;
+import controlador.servicios.EspectaculoService;
+import controlador.servicios.PersonaService;
+import controlador.servicios.RegistroService;
+import controlador.servicios.SesionService;
 
 import java.nio.file.Path;
 import java.nio.file.Paths;
@@ -39,9 +41,6 @@ import org.w3c.dom.Document;
 import org.w3c.dom.Element;
 import org.w3c.dom.Node;
 import org.w3c.dom.NodeList;
-
-import dao.ConexionBD;
-import dao.CoordinacionDAO;
 
 public class MetodosVista {
 

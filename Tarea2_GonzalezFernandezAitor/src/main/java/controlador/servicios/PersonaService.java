@@ -4,12 +4,12 @@
 * @version 1.0
 */
 
-package servicios;
+package controlador.servicios;
 
 import java.util.List;
 
-import dao.ConexionBD;
-import dao.PersonaDAO;
+import controlador.dao.ConexionBD;
+import controlador.dao.PersonaDAO;
 import modelo.Persona;
 
 public class PersonaService {

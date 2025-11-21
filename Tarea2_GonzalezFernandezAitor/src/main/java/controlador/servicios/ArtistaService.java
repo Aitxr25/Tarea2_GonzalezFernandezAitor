@@ -4,7 +4,7 @@
  * @version 1.0
  */
 
-package servicios;
+package controlador.servicios;
 
 import java.sql.Connection;
 import java.util.Comparator;
@@ -14,11 +14,11 @@ import java.util.Map;
 import java.util.Set;
 import java.util.stream.Collectors;
 
-import dao.ArtistaDAO;
-import dao.ConexionBD;
-import dao.EspectaculoDAO;
-import dao.NumeroDAO;
-import dao.PersonaDAO;
+import controlador.dao.ArtistaDAO;
+import controlador.dao.ConexionBD;
+import controlador.dao.EspectaculoDAO;
+import controlador.dao.NumeroDAO;
+import controlador.dao.PersonaDAO;
 import modelo.Artista;
 import modelo.Especialidad;
 import modelo.Espectaculo;

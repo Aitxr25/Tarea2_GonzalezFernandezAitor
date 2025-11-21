@@ -1,8 +1,8 @@
 package vista;
 
-import dao.ConexionBD;
-import servicios.ArtistaService;
-import servicios.SesionService;
+import controlador.dao.ConexionBD;
+import controlador.servicios.ArtistaService;
+import controlador.servicios.SesionService;
 
 public class Menu {
 

@@ -1,4 +1,4 @@
-package dao;
+package controlador.dao;
 
 import modelo.Credenciales;
 import modelo.Perfil;
