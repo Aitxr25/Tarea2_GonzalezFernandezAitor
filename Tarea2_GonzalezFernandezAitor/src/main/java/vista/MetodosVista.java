@@ -54,7 +54,8 @@ public class MetodosVista {
 	public void mostrarLogin() {
 		// no se deberia de dar este caso
 		if (SesionService.isLogged()) {
-			System.out.println("Ya hay una sesion iniciada. Cierra sesión primero.");
+			System.out.println(
+					"Ya hay una sesion iniciada. Cierra sesión primero.");
 			return;
 		}
 		System.out.print("Usuario: ");
@@ -70,7 +71,8 @@ public class MetodosVista {
 		Optional<Credenciales> resultado = credService.login(user, pass);
 		if (resultado.isPresent()) {
 			SesionService.iniciarSesion(resultado.get());
-			System.out.println("Login correcto. Perfil: " + resultado.get().getPerfil());
+			System.out.println(
+					"Login correcto. Perfil: " + resultado.get().getPerfil());
 		} else {
 			System.out.println("Credenciales incorrectas.");
 		}
@@ -89,7 +91,8 @@ public class MetodosVista {
 	// CU1
 	public static void verEspectaculos() {
 
-		EspectaculoService service = new EspectaculoService(ConexionBD.getInstance());
+		EspectaculoService service = new EspectaculoService(
+				ConexionBD.getInstance());
 
 		System.out.println("\n===== LISTA DE ESPECTÁCULOS =====");
 
@@ -104,7 +107,8 @@ public class MetodosVista {
 			System.out.println("--------------------------------------------");
 			System.out.println("ID: " + e.getId());
 			System.out.println("Nombre: " + e.getNombre());
-			System.out.println("Periodo: " + e.getFechaini() + "  hasta  " + e.getFechafin());
+			System.out.println("Periodo: " + e.getFechaini() + "  hasta  "
+					+ e.getFechafin());
 		}
 
 		System.out.println("--------------------------------------------");
@@ -116,7 +120,8 @@ public class MetodosVista {
 		Path rutaPaises = Paths.get("src/main/resources/paises.xml");
 
 		try {
-			DocumentBuilderFactory dbFactory = DocumentBuilderFactory.newInstance();
+			DocumentBuilderFactory dbFactory = DocumentBuilderFactory
+					.newInstance();
 			DocumentBuilder dBuilder = dbFactory.newDocumentBuilder();
 			Document doc = dBuilder.parse(rutaPaises.toFile());
 
@@ -129,14 +134,17 @@ public class MetodosVista {
 				if (nodo.getNodeType() == Node.ELEMENT_NODE) {
 					Element elemento = (Element) nodo;
 
-					String id = elemento.getElementsByTagName("id").item(0).getTextContent();
-					String nombre = elemento.getElementsByTagName("nombre").item(0).getTextContent();
+					String id = elemento.getElementsByTagName("id").item(0)
+							.getTextContent();
+					String nombre = elemento.getElementsByTagName("nombre")
+							.item(0).getTextContent();
 
 					paises.put(id, nombre);
 				}
 			}
 		} catch (Exception e) {
-			System.out.println("Error al cargar paises desde XML: " + e.getMessage());
+			System.out.println(
+					"Error al cargar paises desde XML: " + e.getMessage());
 		}
 
 		return paises;
@@ -179,19 +187,22 @@ public class MetodosVista {
 			System.out.print("Nombre real: ");
 			nombreReal = scanner.nextLine().trim();
 
-			if (nombreReal.isEmpty() || !nombreReal.matches("^[a-zA-ZÁÉÍÓÚáéíóúÑñüÜ\\s]+$")) {
+			if (nombreReal.isEmpty()
+					|| !nombreReal.matches("^[a-zA-ZÁÉÍÓÚáéíóúÑñüÜ\\s]+$")) {
 				System.out.println("Nombre inválido.");
 			}
 
-		} while (nombreReal.isEmpty() || !nombreReal.matches("^[a-zA-ZÁÉÍÓÚáéíóúÑñüÜ\\s]+$"));
+		} while (nombreReal.isEmpty()
+				|| !nombreReal.matches("^[a-zA-ZÁÉÍÓÚáéíóúÑñüÜ\\s]+$"));
 
 		// validacion email
 		String email;
 		do {
-			System.out.print("Email: ");
-			email = scanner.nextLine().trim();
+			System.out.print("Email (sera guardado en misusculas): ");
+			email = scanner.nextLine().trim().toLowerCase();
 
-			boolean formatoCorrecto = email.matches("^[^@\\s]+@[^@\\s]+\\.[^@\\s]+$");
+			boolean formatoCorrecto = email
+					.matches("^[^@\\s]+@[^@\\s]+\\.[^@\\s]+$");
 			boolean existe = reg.existeEmail(email);
 
 			if (!formatoCorrecto || existe) {
@@ -214,7 +225,8 @@ public class MetodosVista {
 		// credenciales - usuario
 		String usuario;
 		do {
-			System.out.print("Nombre de usuario (sera guardado en minusculas): ");
+			System.out
+			.print("Nombre de usuario (sera guardado en minusculas): ");
 			usuario = scanner.nextLine().trim().toLowerCase();
 
 			boolean ok = usuario.matches("^[a-z]+$") && usuario.length() >= 3;
@@ -285,7 +297,8 @@ public class MetodosVista {
 					String fechaStr = scanner.nextLine();
 
 					try {
-						fechaSenior = LocalDate.parse(fechaStr, DateTimeFormatter.ofPattern("dd-MM-yyyy"));
+						fechaSenior = LocalDate.parse(fechaStr,
+								DateTimeFormatter.ofPattern("dd-MM-yyyy"));
 					} catch (Exception e) {
 						System.out.println("Fecha invalida.");
 						fechaOk = false;
@@ -304,7 +317,8 @@ public class MetodosVista {
 				System.out.print("Apodo (opcional): ");
 				apodo = scanner.nextLine().trim();
 
-				if (!apodo.isEmpty() && !apodo.matches("^[a-zA-ZÁÉÍÓÚáéíóúÑñüÜ\\s]+$")) {
+				if (!apodo.isEmpty()
+						&& !apodo.matches("^[a-zA-ZÁÉÍÓÚáéíóúÑñüÜ\\s]+$")) {
 					System.out.println("Apodo invalido.");
 					apodoCorrecto = false;
 				}
@@ -312,13 +326,15 @@ public class MetodosVista {
 			} while (!apodoCorrecto);
 
 			boolean especialidadesOK;
-			System.out.println("Especialidades: ACROBACIA, HUMOR, MAGIA, EQUILIBRISMO, MALABARISMO");
+			System.out.println(
+					"Especialidades: ACROBACIA, HUMOR, MAGIA, EQUILIBRISMO, MALABARISMO");
 
 			do {
 				especialidades.clear();
 				especialidadesOK = true;
 
-				System.out.print("Introduce especialidades separadas por coma: ");
+				System.out
+				.print("Introduce especialidades separadas por coma: ");
 				String linea = scanner.nextLine();
 
 				try {
@@ -346,15 +362,18 @@ public class MetodosVista {
 			System.out.println("Es senior: " + (esSenior ? "Sí" : "No"));
 
 			if (esSenior && fechaSenior != null) {
-				DateTimeFormatter fmt = DateTimeFormatter.ofPattern("dd-MM-yyyy");
-				System.out.println("Fecha antigüedad: " + fechaSenior.format(fmt));
+				DateTimeFormatter fmt = DateTimeFormatter
+						.ofPattern("dd-MM-yyyy");
+				System.out.println(
+						"Fecha antigüedad: " + fechaSenior.format(fmt));
 			}
 		}
 
 		if (perfil == Perfil.ARTISTA) {
-			System.out.println("Apodo: " + (apodo.isEmpty() ? "Ninguno" : apodo));
-			System.out.println(
-					"Especialidades: " + especialidades.stream().map(Enum::name).collect(Collectors.joining(", ")));
+			System.out
+			.println("Apodo: " + (apodo.isEmpty() ? "Ninguno" : apodo));
+			System.out.println("Especialidades: " + especialidades.stream()
+			.map(Enum::name).collect(Collectors.joining(", ")));
 		}
 
 		// confirmar
@@ -375,8 +394,9 @@ public class MetodosVista {
 		}
 
 		// guardar
-		Long idPersona = reg.registrar(nombreReal, email, usuario, password, nacionalidad, perfil, esSenior,
-				fechaSenior, apodo, especialidades);
+		Long idPersona = reg.registrar(nombreReal, email, usuario, password,
+				nacionalidad, perfil, esSenior, fechaSenior, apodo,
+				especialidades);
 
 		if (idPersona == null) {
 			System.out.println("Error inesperado en el registro.");
@@ -389,7 +409,8 @@ public class MetodosVista {
 	// CU3C
 	public static void modificarDatosPersonales() {
 
-		PersonaService personaService = new PersonaService(ConexionBD.getInstance());
+		PersonaService personaService = new PersonaService(
+				ConexionBD.getInstance());
 
 		System.out.println("\n===== MODIFICAR DATOS PERSONALES =====");
 
@@ -401,7 +422,8 @@ public class MetodosVista {
 		}
 
 		for (Persona p : personas) {
-			System.out.printf("%d | %s | %s | %s%n", p.getId(), p.getNombre(), p.getEmail(), p.getNacionalidad());
+			System.out.printf("%d | %s | %s | %s%n", p.getId(), p.getNombre(),
+					p.getEmail(), p.getNacionalidad());
 		}
 
 		Long id = null;
@@ -487,9 +509,11 @@ public class MetodosVista {
 		} while (nac == null);
 
 		// actualizar persona
-		boolean ok = personaService.actualizarDatosPersonales(p.getId(), nombre, email, nac);
+		boolean ok = personaService.actualizarDatosPersonales(p.getId(), nombre,
+				email, nac);
 
-		System.out.println(ok ? "Datos personales actualizados." : "Error actualizando.");
+		System.out.println(
+				ok ? "Datos personales actualizados." : "Error actualizando.");
 	}
 
 	// metodo que modifica los datos del artista
@@ -508,8 +532,10 @@ public class MetodosVista {
 		}
 
 		for (Artista a : artistas) {
-			String espec = a.getEspecialidades().stream().map(Enum::name).collect(Collectors.joining(","));
-			System.out.printf("%d | %s | %s | %s%n", a.getIdArt(), a.getNombre(), a.getApodo(), espec);
+			String espec = a.getEspecialidades().stream().map(Enum::name)
+					.collect(Collectors.joining(","));
+			System.out.printf("%d | %s | %s | %s%n", a.getIdArt(),
+					a.getNombre(), a.getApodo(), espec);
 		}
 
 		Long idArt = null;
@@ -552,7 +578,9 @@ public class MetodosVista {
 
 		do {
 			System.out.print("Especialidades separadas por comas ("
-					+ a.getEspecialidades().stream().map(Enum::name).collect(Collectors.joining(",")) + "): ");
+					+ a.getEspecialidades().stream().map(Enum::name)
+					.collect(Collectors.joining(","))
+					+ "): ");
 
 			String linea = scanner.nextLine().trim();
 
@@ -563,7 +591,8 @@ public class MetodosVista {
 			}
 
 			try {
-				nuevas = Arrays.stream(linea.split(",")).map(s -> Especialidad.valueOf(s.trim().toUpperCase()))
+				nuevas = Arrays.stream(linea.split(","))
+						.map(s -> Especialidad.valueOf(s.trim().toUpperCase()))
 						.collect(Collectors.toSet());
 				okEspec = true;
 			} catch (Exception e) {
@@ -581,7 +610,8 @@ public class MetodosVista {
 	// metodo que modifica los datos del coordinador
 	public static void modificarDatosCoordinador() {
 
-		CoordinacionService coordService = new CoordinacionService(new CoordinacionDAO(ConexionBD.getInstance()));
+		CoordinacionService coordService = new CoordinacionService(
+				new CoordinacionDAO(ConexionBD.getInstance()));
 
 		System.out.println("\n===== MODIFICAR DATOS DE COORDINADOR =====");
 
@@ -593,8 +623,9 @@ public class MetodosVista {
 		}
 
 		for (Coordinacion c : lista) {
-			System.out.printf("%d | %s | senior=%s | fecha=%s%n", c.getIdCoord(), c.getNombre(),
-					c.isSenior() ? "SI" : "NO", c.getFechasenior() == null ? "-" : c.getFechasenior());
+			System.out.printf("%d | %s | senior=%s | fecha=%s%n",
+					c.getIdCoord(), c.getNombre(), c.isSenior() ? "SI" : "NO",
+							c.getFechasenior() == null ? "-" : c.getFechasenior());
 		}
 
 		Long idCoord = null;
@@ -618,7 +649,8 @@ public class MetodosVista {
 		// senior
 		String sen;
 		do {
-			System.out.print("¿Es senior? (s/n) [" + (c.isSenior() ? "s" : "n") + "]: ");
+			System.out.print(
+					"¿Es senior? (s/n) [" + (c.isSenior() ? "s" : "n") + "]: ");
 			sen = scanner.nextLine().trim().toLowerCase();
 			if (sen.isEmpty())
 				sen = c.isSenior() ? "s" : "n";
@@ -634,8 +666,11 @@ public class MetodosVista {
 			boolean okFecha = false;
 
 			do {
-				System.out.print("Fecha antigüedad (dd-MM-yyyy) ["
-						+ (c.getFechasenior() == null ? "-" : c.getFechasenior().format(fmt)) + "]: ");
+				System.out
+				.print("Fecha antigüedad (dd-MM-yyyy) ["
+						+ (c.getFechasenior() == null ? "-"
+								: c.getFechasenior().format(fmt))
+						+ "]: ");
 
 				String f = scanner.nextLine().trim();
 
@@ -646,7 +681,8 @@ public class MetodosVista {
 				}
 
 				try {
-					fechaNueva = LocalDate.parse(f, DateTimeFormatter.ofPattern("dd-MM-yyyy"));
+					fechaNueva = LocalDate.parse(f,
+							DateTimeFormatter.ofPattern("dd-MM-yyyy"));
 					okFecha = true;
 				} catch (Exception e) {
 					System.out.println("Fecha invalida.");
@@ -655,7 +691,8 @@ public class MetodosVista {
 			} while (!okFecha);
 		}
 
-		boolean ok = coordService.actualizarCoordinador(c.getIdPersona(), seniorNuevo, fechaNueva);
+		boolean ok = coordService.actualizarCoordinador(c.getIdPersona(),
+				seniorNuevo, fechaNueva);
 
 		System.out.println(ok ? "Coordinador actualizado." : "Error.");
 	}
@@ -663,7 +700,8 @@ public class MetodosVista {
 	// CU 4 para visualizar un espectaculo completo
 	public static void verEspectaculoCompleto() {
 
-		EspectaculoService service = new EspectaculoService(ConexionBD.getInstance());
+		EspectaculoService service = new EspectaculoService(
+				ConexionBD.getInstance());
 		System.out.println("\n===== ESPECTACULOS DISPONIBLES =====");
 
 		List<Espectaculo> lista = service.obtenerTodos();
@@ -694,7 +732,8 @@ public class MetodosVista {
 	// CU5 Gestion de espectaculos
 	public static void gestionarEspectaculos() {
 
-		EspectaculoService service = new EspectaculoService(ConexionBD.getInstance());
+		EspectaculoService service = new EspectaculoService(
+				ConexionBD.getInstance());
 		DateTimeFormatter fmt = DateTimeFormatter.ofPattern("dd-MM-yyyy");
 
 		int opcion;
@@ -717,6 +756,7 @@ public class MetodosVista {
 
 			switch (opcion) {
 
+			// crear espectaculos
 			case 1: {
 				try {
 					System.out.println("\n--- CREAR ESPECTACULO ---");
@@ -724,41 +764,60 @@ public class MetodosVista {
 					System.out.print("Nombre del espectaculo: ");
 					String nombre = scanner.nextLine().trim();
 
+					// validacion de que no se repita el espectaculo en la base
+					// de datos
+					if (service.nombreExiste(nombre)) {
+						System.out.println("El nombre ya esta en uso.");
+						break;
+					}
+
 					System.out.print("Fecha inicio (dd-MM-yyyy): ");
-					LocalDate ini = LocalDate.parse(scanner.nextLine().trim(), fmt);
+					LocalDate ini = LocalDate.parse(scanner.nextLine().trim(),
+							fmt);
 
 					System.out.print("Fecha fin (dd-MM-yyyy): ");
-					LocalDate fin = LocalDate.parse(scanner.nextLine().trim(), fmt);
+					LocalDate fin = LocalDate.parse(scanner.nextLine().trim(),
+							fmt);
 
 					long idCoord;
 
-					if (SesionService.getUsuario().getPerfil() == Perfil.COORDINADOR) {
+					if (SesionService.getUsuario()
+							.getPerfil() == Perfil.COORDINADOR) {
 
 						Long idCoordLog = service.getCoordinacionDAO()
-								.obtenerIdCoordPorIdCredenciales(SesionService.getUsuario().getIdCredenciales());
+								.obtenerIdCoordPorIdCredenciales(SesionService
+										.getUsuario().getIdCredenciales());
 
 						if (idCoordLog == null) {
-							System.out.println("No se encontro su ID de coordinador.");
+							System.out.println(
+									"No se encontro su ID de coordinador.");
 							break;
 						}
 
 						idCoord = idCoordLog;
-						System.out.println("Asignado automaticamente su ID de coordinador: " + idCoord);
+						System.out.println(
+								"Asignado automaticamente su ID de coordinador: "
+										+ idCoord);
 
 					} else {
 
-						List<Coordinacion> lista = service.getCoordinacionDAO().obtenerTodos();
+						List<Coordinacion> lista = service.getCoordinacionDAO()
+								.obtenerTodos();
 
 						if (lista.isEmpty()) {
-							System.out.println("No hay coordinadores registrados.");
+							System.out.println(
+									"No hay coordinadores registrados.");
 							break;
 						}
 
-						System.out.println("\n===== COORDINADORES DISPONIBLES =====");
+						System.out.println(
+								"\n===== COORDINADORES DISPONIBLES =====");
 						for (Coordinacion c : lista) {
-							System.out.println("IDCoord: " + c.getIdCoord() + " | Nombre: " + c.getNombre());
+							System.out.println("IDCoord: " + c.getIdCoord()
+							+ " | Nombre: " + c.getNombre());
 						}
-						System.out.println("=====================================");
+						System.out.println(
+								"=====================================");
 
 						System.out.print("Introduce el ID del coordinador: ");
 						idCoord = Long.parseLong(scanner.nextLine().trim());
@@ -778,17 +837,62 @@ public class MetodosVista {
 						System.out.print("Nombre: ");
 						String nom = scanner.nextLine().trim();
 
-						System.out.print("Duracion (minutos): ");
-						double dur = Double.parseDouble(scanner.nextLine());
+						// pedir parte entera
+						int minutos = -1;
+						do {
+							System.out.print(
+									"Duración, minutos (debe ser un entero): ");
+							try {
+								minutos = Integer
+										.parseInt(scanner.nextLine().trim());
+								if (minutos < 0) {
+									System.out.println(
+											"Debe ser un número mayor o igual a 0.");
+									minutos = -1;
+								}
+							} catch (Exception e) {
+								System.out.println("Valor no valido.");
+							}
+						} while (minutos < 0);
 
-						numeros.add(new Numero(null, i, nom, dur, new HashSet<>()));
+						int dec = -1;
+						do {
+							System.out.print(
+									"¿Tiene medio minuto? (0 = no, 5 = medio minuto): ");
+							try {
+								dec = Integer
+										.parseInt(scanner.nextLine().trim());
+								if (dec != 0 && dec != 5) {
+									System.out
+									.println("Debes introducir 0 o 5.");
+									dec = -1;
+								}
+							} catch (Exception e) {
+								System.out.println("Valor no válido.");
+							}
+						} while (dec < 0);
+
+						double dur = minutos + (dec == 5 ? 0.5 : 0.0);
+
+						// pedir parte decimal
+
+						/*
+						 * System.out.print("Duracion (minutos): "); double dur
+						 * = Double.parseDouble(scanner.nextLine());
+						 */
+
+						numeros.add(
+								new Numero(null, i, nom, dur, new HashSet<>()));
 					}
 
-					long idNuevo = service.crearEspectaculo(nombre, ini, fin, idCoord, numeros);
-					System.out.println("Espectaculo creado con ID = " + idNuevo);
+					long idNuevo = service.crearEspectaculo(nombre, ini, fin,
+							idCoord, numeros);
+					System.out
+					.println("Espectaculo creado con ID = " + idNuevo);
 
 				} catch (Exception e) {
-					System.out.println("Error creando espectaculo: " + e.getMessage());
+					System.out.println(
+							"Error creando espectaculo: " + e.getMessage());
 				}
 				break;
 			}
@@ -808,7 +912,8 @@ public class MetodosVista {
 
 					System.out.println("\n--- LISTA DE ESPECTÁCULOS ---");
 					for (Espectaculo e : lista) {
-						System.out.printf("%d | %s | %s - %s%n", e.getId(), e.getNombre(), e.getFechaini().format(fmt),
+						System.out.printf("%d | %s | %s - %s%n", e.getId(),
+								e.getNombre(), e.getFechaini().format(fmt),
 								e.getFechafin().format(fmt));
 					}
 					System.out.println("-----------------------------");
@@ -819,27 +924,32 @@ public class MetodosVista {
 					Espectaculo esp = service.obtenerPorId(id);
 
 					if (esp == null) {
-						System.out.println("No existe un espectaculo con esa ID.");
+						System.out.println(
+								"No existe un espectaculo con esa ID.");
 						break;
 					}
 
-					System.out.print("Nuevo nombre (" + esp.getNombre() + "): ");
+					System.out
+					.print("Nuevo nombre (" + esp.getNombre() + "): ");
 					String nombre = scanner.nextLine().trim();
 					if (!nombre.isBlank())
 						esp.setNombre(nombre);
 
-					System.out.print("Nueva fecha inicio (" + esp.getFechaini().format(fmt) + "): ");
+					System.out.print("Nueva fecha inicio ("
+							+ esp.getFechaini().format(fmt) + "): ");
 					String f1 = scanner.nextLine().trim();
 					if (!f1.isBlank())
 						esp.setFechaini(LocalDate.parse(f1, fmt));
 
-					System.out.print("Nueva fecha fin (" + esp.getFechafin().format(fmt) + "): ");
+					System.out.print("Nueva fecha fin ("
+							+ esp.getFechafin().format(fmt) + "): ");
 					String f2 = scanner.nextLine().trim();
 					if (!f2.isBlank())
 						esp.setFechafin(LocalDate.parse(f2, fmt));
 
 					boolean ok = service.actualizarEspectaculo(esp);
-					System.out.println(ok ? "Espectaculo actualizado." : "Error actualizando.");
+					System.out.println(ok ? "Espectaculo actualizado."
+							: "Error actualizando.");
 
 				} catch (Exception e) {
 					System.out.println("Error: " + e.getMessage());
@@ -859,9 +969,11 @@ public class MetodosVista {
 						break;
 					}
 
-					System.out.println("\n===== ESPECTÁCULOS DISPONIBLES =====");
+					System.out
+					.println("\n===== ESPECTÁCULOS DISPONIBLES =====");
 					for (Espectaculo e : lista) {
-						System.out.println("ID: " + e.getId() + " | Nombre: " + e.getNombre());
+						System.out.println("ID: " + e.getId() + " | Nombre: "
+								+ e.getNombre());
 					}
 					System.out.println("=====================================");
 
@@ -871,7 +983,8 @@ public class MetodosVista {
 
 					Espectaculo esp = service.obtenerPorId(id);
 					if (esp == null) {
-						System.out.println("No existe un espectaculo con ese ID.");
+						System.out.println(
+								"No existe un espectaculo con ese ID.");
 						break;
 					}
 
@@ -881,9 +994,11 @@ public class MetodosVista {
 					while (cantidad < 3) {
 						System.out.print("Cantidad de numeros (mínimo 3): ");
 						try {
-							cantidad = Integer.parseInt(scanner.nextLine().trim());
+							cantidad = Integer
+									.parseInt(scanner.nextLine().trim());
 							if (cantidad < 3) {
-								System.out.println("Debes introducir al menos 3 numeros.\n");
+								System.out.println(
+										"Debes introducir al menos 3 numeros.\n");
 							}
 						} catch (NumberFormatException e) {
 							System.out.println("Introduce un número valido.");
@@ -900,10 +1015,45 @@ public class MetodosVista {
 						System.out.print("Nombre: ");
 						String nom = scanner.nextLine().trim();
 
-						System.out.print("Duracion (minutos): ");
-						double dur = Double.parseDouble(scanner.nextLine().trim());
+						// pedir los minutos
+						int minutos = -1;
+						do {
+							System.out.print(
+									"Duración, minutos (debe ser un entero): ");
+							try {
+								minutos = Integer
+										.parseInt(scanner.nextLine().trim());
+								if (minutos < 0) {
+									System.out.println(
+											"Debe ser un número mayor o igual a 0.");
+									minutos = -1;
+								}
+							} catch (Exception e) {
+								System.out.println("Valor no válido.");
+							}
+						} while (minutos < 0);
 
-						nuevos.add(new Numero(null, i, nom, dur, new HashSet<>()));
+						// pedir decimal 0 ó 5
+						int dec = -1;
+						do {
+							System.out.print(
+									"¿Tiene medio minuto? (0 = no, 5 = medio minuto): ");
+							try {
+								dec = Integer
+										.parseInt(scanner.nextLine().trim());
+								if (dec != 0 && dec != 5) {
+									System.out
+									.println("Debes introducir 0 o 5.");
+									dec = -1;
+								}
+							} catch (Exception e) {
+								System.out.println("Valor no válido.");
+							}
+						} while (dec < 0);
+						double dur = minutos + (dec == 5 ? 0.5 : 0.0);
+
+						nuevos.add(
+								new Numero(null, i, nom, dur, new HashSet<>()));
 					}
 
 					// reemplazarlos
@@ -931,10 +1081,12 @@ public class MetodosVista {
 					}
 
 					for (Espectaculo e : lista) {
-						System.out.println("--------------------------------------------");
+						System.out.println(
+								"--------------------------------------------");
 						System.out.println("ID: " + e.getId());
 						System.out.println("Nombre: " + e.getNombre());
-						System.out.println("Periodo: " + e.getFechaini() + " hasta " + e.getFechafin());
+						System.out.println("Periodo: " + e.getFechaini()
+						+ " hasta " + e.getFechafin());
 					}
 
 					System.out.print("\nIntroduce el ID del espectaculo: ");
@@ -942,29 +1094,37 @@ public class MetodosVista {
 
 					Espectaculo esp = service.obtenerPorId(idEsp);
 					if (esp == null) {
-						System.out.println("No existe un espectaculo con ese ID.");
+						System.out.println(
+								"No existe un espectaculo con ese ID.");
 						break;
 					}
 
 					System.out.println("\nNumeros del espectaculo:");
-					esp.getNumeros().stream().sorted(Comparator.comparingInt(Numero::getOrden)).forEach(n -> System.out
-							.println("ID: " + n.getId() + " | Orden: " + n.getOrden() + " | Nombre: " + n.getNombre()));
+					esp.getNumeros().stream()
+					.sorted(Comparator.comparingInt(Numero::getOrden))
+					.forEach(n -> System.out.println("ID: " + n.getId()
+					+ " | Orden: " + n.getOrden()
+					+ " | Nombre: " + n.getNombre()));
 
 					// validar ID
 					tempIdNum = -1;
 					boolean idValido = false;
 
 					while (!idValido) {
-						System.out.print("\nIntroduce el ID del numero a modificar: ");
-						long candidato = Long.parseLong(scanner.nextLine().trim());
+						System.out.print(
+								"\nIntroduce el ID del numero a modificar: ");
+						long candidato = Long
+								.parseLong(scanner.nextLine().trim());
 
-						boolean existe = esp.getNumeros().stream().anyMatch(n -> n.getId() == candidato);
+						boolean existe = esp.getNumeros().stream()
+								.anyMatch(n -> n.getId() == candidato);
 
 						if (existe) {
 							tempIdNum = candidato;
 							idValido = true;
 						} else {
-							System.out.println("Ese ID no existe en este espectaculo. Intentalo otra vez.");
+							System.out.println(
+									"Ese ID no existe en este espectaculo. Intentalo otra vez.");
 						}
 					}
 
@@ -974,13 +1134,16 @@ public class MetodosVista {
 
 					while (!ordenValido) {
 						System.out.print("Nuevo orden: ");
-						tempNuevoOrden = Integer.parseInt(scanner.nextLine().trim());
+						tempNuevoOrden = Integer
+								.parseInt(scanner.nextLine().trim());
 
 						boolean repetido = esp.getNumeros().stream()
-								.anyMatch(n -> n.getOrden() == tempNuevoOrden && n.getId() != tempIdNum);
+								.anyMatch(n -> n.getOrden() == tempNuevoOrden
+								&& n.getId() != tempIdNum);
 
 						if (repetido) {
-							System.out.println("Ese orden ya esta en uso. Prueba otro.");
+							System.out.println(
+									"Ese orden ya esta en uso. Prueba otro.");
 						} else {
 							ordenValido = true;
 						}
@@ -989,10 +1152,44 @@ public class MetodosVista {
 					System.out.print("Nuevo nombre: ");
 					String nom = scanner.nextLine().trim();
 
-					System.out.print("Nueva duracion: ");
-					double dur = Double.parseDouble(scanner.nextLine().trim());
+					int minutos = -1;
+					do {
+						System.out.print(
+								"Duración, minutos (debe ser un entero): ");
+						try {
+							minutos = Integer
+									.parseInt(scanner.nextLine().trim());
+							if (minutos < 0) {
+								System.out.println(
+										"Debe ser un numero mayor o igual a 0.");
+								minutos = -1;
+							}
+						} catch (Exception e) {
+							System.out.println("Valor no válido.");
+						}
+					} while (minutos < 0);
 
-					service.actualizarNumero(tempIdNum, tempNuevoOrden, nom, dur);
+					// pedir decimal 0 ó 5
+					int dec = -1;
+					do {
+						System.out.print(
+								"¿Tiene medio minuto? (0 = no, 5 = medio minuto): ");
+						try {
+							dec = Integer.parseInt(scanner.nextLine().trim());
+							if (dec != 0 && dec != 5) {
+								System.out.println("Debes introducir 0 o 5.");
+								dec = -1;
+							}
+						} catch (Exception e) {
+							System.out.println("Valor no válido.");
+						}
+					} while (dec < 0);
+
+					// duración final
+					double dur = minutos + (dec == 5 ? 0.5 : 0.0);
+
+					service.actualizarNumero(tempIdNum, tempNuevoOrden, nom,
+							dur);
 
 					System.out.println("Numero actualizado correctamente.");
 
@@ -1005,7 +1202,8 @@ public class MetodosVista {
 			// asignar artistas
 			case 5: {
 				try {
-					System.out.println("\n--- ASIGNAR ARTISTAS A UN NUMERO ---");
+					System.out
+					.println("\n--- ASIGNAR ARTISTAS A UN NUMERO ---");
 
 					// listar los espectaculos
 					List<Espectaculo> espectaculos = service.obtenerTodos();
@@ -1017,7 +1215,8 @@ public class MetodosVista {
 
 					System.out.println("\n===== ESPECTÁCULOS =====");
 					for (Espectaculo e : espectaculos) {
-						System.out.println("ID: " + e.getId() + " | Nombre: " + e.getNombre());
+						System.out.println("ID: " + e.getId() + " | Nombre: "
+								+ e.getNombre());
 					}
 
 					System.out.print("\nIntroduce ID del espectáculo: ");
@@ -1031,28 +1230,34 @@ public class MetodosVista {
 
 					// listar los numeros
 					if (esp.getNumeros().isEmpty()) {
-						System.out.println("Este espectaculo no tiene números.");
+						System.out
+						.println("Este espectaculo no tiene números.");
 						break;
 					}
 
 					System.out.println("\n===== NUMEROS =====");
-					esp.getNumeros().stream().sorted(Comparator.comparingInt(Numero::getOrden)).forEach(n -> System.out
-							.println("ID: " + n.getId() + " | Orden: " + n.getOrden() + " | Nombre: " + n.getNombre()));
+					esp.getNumeros().stream()
+					.sorted(Comparator.comparingInt(Numero::getOrden))
+					.forEach(n -> System.out.println("ID: " + n.getId()
+					+ " | Orden: " + n.getOrden()
+					+ " | Nombre: " + n.getNombre()));
 
 					System.out.print("\nIntroduce el ID del número: ");
 					long idNum = Long.parseLong(scanner.nextLine().trim());
 
 					// verificar que ese numero existe dentro del espectaculo
-					boolean numeroExiste = esp.getNumeros().stream().anyMatch(n -> n.getId() == idNum);
+					boolean numeroExiste = esp.getNumeros().stream()
+							.anyMatch(n -> n.getId() == idNum);
 
 					if (!numeroExiste) {
-						System.out
-						.println("El numero con ID " + idNum + " no pertenece a este espectáculo o no existe.");
+						System.out.println("El numero con ID " + idNum
+								+ " no pertenece a este espectaculo o no existe.");
 						break;
 					}
 
 					// lista los artistas
-					ArtistaService artistaService = new ArtistaService(ConexionBD.getInstance());
+					ArtistaService artistaService = new ArtistaService(
+							ConexionBD.getInstance());
 					List<Artista> artistas = artistaService.obtenerTodos();
 
 					if (artistas.isEmpty()) {
@@ -1062,11 +1267,16 @@ public class MetodosVista {
 
 					System.out.println("\n===== ARTISTAS DISPONIBLES =====");
 					for (Artista a : artistas) {
-						System.out.println("ID del Artista: " + a.getIdArt() + " | Nombre: " + a.getNombre()
-						+ (a.getApodo() != null && !a.getApodo().isBlank() ? " | Apodo: " + a.getApodo() : ""));
+						System.out.println("ID del Artista: " + a.getIdArt()
+						+ " | Nombre: " + a.getNombre()
+						+ (a.getApodo() != null
+						&& !a.getApodo().isBlank()
+						? " | Apodo: " + a.getApodo()
+						: ""));
 					}
 
-					System.out.print("\nIntroduce IDs de artistas separados por comas: ");
+					System.out.print(
+							"\nIntroduce IDs de artistas separados por comas: ");
 					String linea = scanner.nextLine().trim();
 
 					Set<Long> ids = new HashSet<>();
@@ -1081,14 +1291,16 @@ public class MetodosVista {
 						Artista art = artistaService.obtenerPorId(idArt);
 
 						if (art == null) {
-							System.out.println("El artista con ID " + idArt + " no existe. ");
+							System.out.println("El artista con ID " + idArt
+									+ " no existe. ");
 						} else {
 							idsValidos.add(idArt);
 						}
 					}
 
 					if (idsValidos.isEmpty()) {
-						System.out.println("No se selecciono ningún artista valido.");
+						System.out.println(
+								"No se selecciono a ningun artista valido.");
 						break;
 					}
 

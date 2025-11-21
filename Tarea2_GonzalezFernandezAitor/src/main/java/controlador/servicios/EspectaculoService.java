@@ -31,7 +31,8 @@ public class EspectaculoService {
 	private final ConexionBD conexionBD;
 	private final CoordinacionDAO coordinacionDAO;
 
-	private final DateTimeFormatter fmt = DateTimeFormatter.ofPattern("dd-MM-yyyy");
+	private final DateTimeFormatter fmt = DateTimeFormatter
+			.ofPattern("dd-MM-yyyy");
 
 	public EspectaculoService(ConexionBD conexionBD) {
 
@@ -46,7 +47,8 @@ public class EspectaculoService {
 		this.numeroDAO.setArtistaDAO(artistaDAO);
 
 		// para cargar numeros del espectaculo
-		this.espectaculoDAO = new EspectaculoDAO(connection, conexionBD, numeroDAO);
+		this.espectaculoDAO = new EspectaculoDAO(connection, conexionBD,
+				numeroDAO);
 
 		this.espectaculoDAO.setArtistaDAO(artistaDAO);
 
@@ -62,6 +64,11 @@ public class EspectaculoService {
 		return espectaculoDAO.obtenerTodos();
 	}
 
+	// metodo que comprueba si existe un espectacuo con ese nombre
+	public boolean nombreExiste(String nombre) {
+		return espectaculoDAO.existeNombre(nombre);
+	}
+
 	// CU 4
 	public void mostrarEspectaculoCompleto(long id) {
 
@@ -73,17 +80,21 @@ public class EspectaculoService {
 				return;
 			}
 
-			System.out.println("\n===============================================");
+			System.out.println(
+					"\n===============================================");
 			System.out.println("        INFORME DEL ESPECTACULO");
-			System.out.println("===============================================");
+			System.out
+					.println("===============================================");
 			System.out.println("ID: " + esp.getId());
 			System.out.println("Nombre: " + esp.getNombre());
-			System.out.println("Fechas: " + esp.getFechaini().format(fmt) + " - " + esp.getFechafin().format(fmt));
+			System.out.println("Fechas: " + esp.getFechaini().format(fmt)
+					+ " - " + esp.getFechafin().format(fmt));
 
 			// coordinador
 			System.out.println("\n------------ COORDINACION -------------");
 
-			CoordinacionService coordService = new CoordinacionService(new CoordinacionDAO(conexionBD));
+			CoordinacionService coordService = new CoordinacionService(
+					new CoordinacionDAO(conexionBD));
 
 			var coord = coordService.obtenerCoordinadorPorId(esp.getIdCoord());
 
@@ -92,7 +103,8 @@ public class EspectaculoService {
 			} else {
 				System.out.println("Nombre: " + coord.getNombre());
 				System.out.println("Email: " + coord.getEmail());
-				System.out.println("Senior: " + (coord.isSenior() ? "Si" : "No"));
+				System.out
+						.println("Senior: " + (coord.isSenior() ? "Si" : "No"));
 			}
 
 			// numeros
@@ -105,51 +117,62 @@ public class EspectaculoService {
 				return;
 			}
 
-			numeros.stream().sorted(Comparator.comparingInt(Numero::getOrden)).forEach(num -> {
+			numeros.stream().sorted(Comparator.comparingInt(Numero::getOrden))
+					.forEach(num -> {
 
-				System.out.println("\nNumero ID: " + num.getId());
-				System.out.println("Orden: " + num.getOrden());
-				System.out.println("Nombre: " + num.getNombre());
-				System.out.println("Duracion: " + num.getDuracion() + " min");
+						System.out.println("\nNumero ID: " + num.getId());
+						System.out.println("Orden: " + num.getOrden());
+						System.out.println("Nombre: " + num.getNombre());
+						System.out.println(
+								"Duracion: " + num.getDuracion() + " min");
 
-				System.out.println("Artistas participantes:");
+						System.out.println("Artistas participantes:");
 
-				if (num.getArtistas() == null || num.getArtistas().isEmpty()) {
-					System.out.println("   (sin artistas)");
-					return;
-				}
+						if (num.getArtistas() == null
+								|| num.getArtistas().isEmpty()) {
+							System.out.println("   (sin artistas)");
+							return;
+						}
 
-				num.getArtistas().forEach(art -> {
+						num.getArtistas().forEach(art -> {
 
-					System.out.println("  - " + art.getNombre());
-					System.out.println("    Email: " + art.getEmail());
-					System.out.println("    Nacionalidad: " + art.getNacionalidad());
+							System.out.println("  - " + art.getNombre());
+							System.out.println("    Email: " + art.getEmail());
+							System.out.println("    Nacionalidad: "
+									+ art.getNacionalidad());
 
-					if (!art.getEspecialidades().isEmpty()) {
-						String espStr = art.getEspecialidades().stream().map(Enum::name).reduce((a, b) -> a + ", " + b)
-								.orElse("N/A");
+							if (!art.getEspecialidades().isEmpty()) {
+								String espStr = art.getEspecialidades().stream()
+										.map(Enum::name)
+										.reduce((a, b) -> a + ", " + b)
+										.orElse("N/A");
 
-						System.out.println("    Especialidades: " + espStr);
-					} else {
-						System.out.println("    Especialidades: N/A");
-					}
+								System.out.println(
+										"    Especialidades: " + espStr);
+							} else {
+								System.out.println("    Especialidades: N/A");
+							}
 
-					String apodo = (art.getApodo() == null || art.getApodo().isBlank()) ? "N/A" : art.getApodo();
+							String apodo = (art.getApodo() == null
+									|| art.getApodo().isBlank()) ? "N/A"
+											: art.getApodo();
 
-					System.out.println("    Apodo: " + apodo);
-				});
-			});
+							System.out.println("    Apodo: " + apodo);
+						});
+					});
 
-			System.out.println("\n===============================================");
+			System.out.println(
+					"\n===============================================");
 
 		} catch (Exception e) {
-			System.err.println("Error mostrando el espectaculo completo: " + e.getMessage());
+			System.err.println("Error mostrando el espectaculo completo: "
+					+ e.getMessage());
 		}
 	}
 
 	// CU5 A
-	public long crearEspectaculo(String nombre, LocalDate fechaini, LocalDate fechafin, long idCoord,
-			List<Numero> numeros) {
+	public long crearEspectaculo(String nombre, LocalDate fechaini,
+			LocalDate fechafin, long idCoord, List<Numero> numeros) {
 
 		try {
 			if (nombre == null || nombre.isBlank() || nombre.length() > 25) {
@@ -181,7 +204,8 @@ public class EspectaculoService {
 			Connection conn = conexionBD.getConnection();
 			conn.setAutoCommit(false);
 
-			long idEspect = espectaculoDAO.insertar(nombre, fechaini, fechafin, idCoord);
+			long idEspect = espectaculoDAO.insertar(nombre, fechaini, fechafin,
+					idCoord);
 			if (idEspect <= 0) {
 				conn.rollback();
 				return -1;
@@ -189,7 +213,8 @@ public class EspectaculoService {
 
 			int orden = 1;
 			for (Numero n : numeros) {
-				numeroDAO.insertarNumero(idEspect, orden++, n.getNombre(), n.getDuracion());
+				numeroDAO.insertarNumero(idEspect, orden++, n.getNombre(),
+						n.getDuracion());
 			}
 
 			conn.commit();
@@ -205,23 +230,27 @@ public class EspectaculoService {
 	public boolean actualizarEspectaculo(Espectaculo e) {
 
 		try {
-			if (e.getNombre() == null || e.getNombre().isBlank() || e.getNombre().length() > 25)
+			if (e.getNombre() == null || e.getNombre().isBlank()
+					|| e.getNombre().length() > 25)
 				return false;
 
-			long dias = ChronoUnit.DAYS.between(e.getFechaini(), e.getFechafin());
+			long dias = ChronoUnit.DAYS.between(e.getFechaini(),
+					e.getFechafin());
 			if (dias < 0 || dias > 365)
 				return false;
 
 			return espectaculoDAO.actualizar(e);
 
 		} catch (Exception ex) {
-			System.out.println("Error actualizando espectaculo: " + ex.getMessage());
+			System.out.println(
+					"Error actualizando espectaculo: " + ex.getMessage());
 			return false;
 		}
 	}
 
 	// CU5 B
-	public boolean reemplazarNumeros(long idEspectaculo, List<Numero> nuevosNumeros) {
+	public boolean reemplazarNumeros(long idEspectaculo,
+			List<Numero> nuevosNumeros) {
 
 		if (nuevosNumeros == null || nuevosNumeros.size() < 3) {
 			System.out.println("Debe haber al menos 3 numeros.");
@@ -232,7 +261,8 @@ public class EspectaculoService {
 	}
 
 	// CU5 B
-	public void actualizarNumero(long idNumero, int orden, String nombre, double duracion) {
+	public void actualizarNumero(long idNumero, int orden, String nombre,
+			double duracion) {
 
 		try {
 			if (nombre == null || nombre.isBlank()) {
