@@ -14,40 +14,40 @@ import modelo.Coordinacion;
 
 public class CoordinacionService {
 
-    private final CoordinacionDAO coordinacionDAO;
+	private final CoordinacionDAO coordinacionDAO;
 
-    public CoordinacionService(CoordinacionDAO coordinacionDAO) {
-        this.coordinacionDAO = coordinacionDAO;
-    }
+	public CoordinacionService(CoordinacionDAO coordinacionDAO) {
+		this.coordinacionDAO = coordinacionDAO;
+	}
 
-    //metodo que devuelve al coordinador por su id
-    public Coordinacion obtenerCoordinadorPorId(Long idCoord) {
+	// metodo que devuelve al coordinador por su id
+	public Coordinacion obtenerCoordinadorPorId(Long idCoord) {
 
-        if (idCoord == null) {
-            System.err.println("Error: el ID del coordinador no puede ser null.");
-            return null;
-        }
+		if (idCoord == null) {
+			System.err.println("Error: el ID del coordinador no puede ser null.");
+			return null;
+		}
 
-        try {
-            return coordinacionDAO.buscarCoordinadorPorId(idCoord);
-        } catch (Exception e) {
-            System.err.println("Error obteniendo coordinador por ID: " + e.getMessage());
-            return null;
-        }
-    }
-    
-    // metodo que busca coordinador por idPersona
-    public Coordinacion buscarPorIdPersona(Long idPersona) {
-        return coordinacionDAO.buscarPorIdPersona(idPersona);
-    }
-    
-    //metodo que actualiza al coordinador
-    public boolean actualizarCoordinador(Long idPersona, boolean senior, LocalDate fecha) {
-        return coordinacionDAO.actualizarCoordinador(idPersona, senior, fecha);
-    }
-    
-    //metodo que devuelve lista de coordinadores
-    public List<Coordinacion> obtenerTodos() {
-        return coordinacionDAO.obtenerTodos();
-    }
+		try {
+			return coordinacionDAO.buscarCoordinadorPorId(idCoord);
+		} catch (Exception e) {
+			System.err.println("Error obteniendo coordinador por ID: " + e.getMessage());
+			return null;
+		}
+	}
+
+	// metodo que busca coordinador por idPersona
+	public Coordinacion buscarPorIdPersona(Long idPersona) {
+		return coordinacionDAO.buscarPorIdPersona(idPersona);
+	}
+
+	// metodo que actualiza al coordinador
+	public boolean actualizarCoordinador(Long idPersona, boolean senior, LocalDate fecha) {
+		return coordinacionDAO.actualizarCoordinador(idPersona, senior, fecha);
+	}
+
+	// metodo que devuelve lista de coordinadores
+	public List<Coordinacion> obtenerTodos() {
+		return coordinacionDAO.obtenerTodos();
+	}
 }

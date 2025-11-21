@@ -54,6 +54,7 @@ public class ArtistaService {
 		return artistaDAO;
 	}
 
+	// metodo que muestra la ficha del artista
 	public void verFichaArtista(long idArtista) {
 
 		Artista artista = artistaDAO.obtenerPorId(idArtista);
@@ -81,8 +82,8 @@ public class ArtistaService {
 			System.out.println(
 					artista.getEspecialidades().stream().map(Enum::name).reduce((a, b) -> a + ", " + b).orElse("N/A"));
 		}
-		
-		//para obtener los numeros en los que participo un artista
+
+		// para obtener los numeros en los que participo un artista
 		System.out.println("\n----------- TRAYECTORIA -----------");
 
 		List<Numero> numeros = numeroDAO.obtenerNumerosDeArtista(idArtista);
@@ -121,15 +122,16 @@ public class ArtistaService {
 		System.out.println("====================================\n");
 	}
 
+	// metodo que actualiza los artistas
 	public boolean actualizarArtista(Long idPersona, String apodo, Set<Especialidad> especialidades) {
 		return artistaDAO.actualizarArtista(idPersona, apodo, especialidades);
 	}
-	
+
 	public Set<Especialidad> convertirEspecialidades(String linea) {
-	    Set<Especialidad> set = new HashSet<>();
-	    for (String s : linea.split(",")) {
-	        set.add(Especialidad.valueOf(s.trim().toUpperCase()));
-	    }
-	    return set;
+		Set<Especialidad> set = new HashSet<>();
+		for (String s : linea.split(",")) {
+			set.add(Especialidad.valueOf(s.trim().toUpperCase()));
+		}
+		return set;
 	}
 }
