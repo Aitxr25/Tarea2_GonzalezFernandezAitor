@@ -76,6 +76,7 @@ public class MetodosVista {
 		}
 	}
 
+	// metodo que pide entero
 	public static int pedirEntero(String solicitud) {
 		System.out.print(solicitud);
 		try {
@@ -491,6 +492,7 @@ public class MetodosVista {
 		System.out.println(ok ? "Datos personales actualizados." : "Error actualizando.");
 	}
 
+	// metodo que modifica los datos del artista
 	public static void modificarDatosArtista() {
 
 		ConexionBD conex = ConexionBD.getInstance();
@@ -576,6 +578,7 @@ public class MetodosVista {
 		System.out.println(ok ? "Artista actualizado." : "Error.");
 	}
 
+	// metodo que modifica los datos del coordinador
 	public static void modificarDatosCoordinador() {
 
 		CoordinacionService coordService = new CoordinacionService(new CoordinacionDAO(ConexionBD.getInstance()));
@@ -1044,7 +1047,7 @@ public class MetodosVista {
 
 					if (!numeroExiste) {
 						System.out
-								.println("El numero con ID " + idNum + " no pertenece a este espectáculo o no existe.");
+						.println("El numero con ID " + idNum + " no pertenece a este espectáculo o no existe.");
 						break;
 					}
 
@@ -1060,7 +1063,7 @@ public class MetodosVista {
 					System.out.println("\n===== ARTISTAS DISPONIBLES =====");
 					for (Artista a : artistas) {
 						System.out.println("ID del Artista: " + a.getIdArt() + " | Nombre: " + a.getNombre()
-								+ (a.getApodo() != null && !a.getApodo().isBlank() ? " | Apodo: " + a.getApodo() : ""));
+						+ (a.getApodo() != null && !a.getApodo().isBlank() ? " | Apodo: " + a.getApodo() : ""));
 					}
 
 					System.out.print("\nIntroduce IDs de artistas separados por comas: ");

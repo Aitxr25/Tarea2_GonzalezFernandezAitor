@@ -9,7 +9,7 @@ public class Principal {
     public static void main(String[] args) {
         
        
-
+    	//para inicializar conexion
         
         try {
             ConexionBD.getInstance().getConnection();
@@ -35,6 +35,7 @@ public class Principal {
             }
 
         } while (seguir);
+        //para cerrar la conexion en la base de datos
         ConexionBD.getInstance().cerrarConexion();
 
         System.out.println("Programa finalizado.");
